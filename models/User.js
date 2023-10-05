@@ -12,10 +12,19 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  role: {
+    type: String,
+    required: true
+  },
   password: {
     type: String,
     required: true,
   },
+  balance: {
+    type: Number,
+    required: true,
+    default: 0
+  }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -28,7 +37,9 @@ const validateUser = (user) => {
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
+    role: Joi.string().required(),
     password: Joi.string().required(),
+    balance: Joi.number().min(0)
   });
   return schema.validate(user);
 };
