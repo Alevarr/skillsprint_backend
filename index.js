@@ -1,13 +1,10 @@
 const config = require("config");
 const express = require("express");
 const app = express();
-const genresRouter = require("./routes/genres");
-const customersRouter = require("./routes/customers");
-const movieRouter = require("./routes/movies");
-const rentalRouter = require("./routes/rentals");
 const homeRouter = require("./routes/home");
 const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const casesRouter = require("./routes/cases");
 const mongoose = require("mongoose");
 
 if (!config.get("jwtPrivateKey")) {
@@ -22,6 +19,7 @@ mongoose
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/cases", casesRouter)
 app.use("/", homeRouter);
 require("./startup/prod")(app);
 

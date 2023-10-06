@@ -1,7 +1,5 @@
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("config");
 const express = require("express");
 const router = express.Router();
 const { User, validate } = require("../models/User");
@@ -38,11 +36,10 @@ router.post("/", async (req, res) => {
         .header("x-auth-token", result.generateAuthToken())
         .send(_.pick(result, ["name", "email", "role", "balance"]))
     )
-    .catch((e) => res.status(400).send("Bad request"));
+    .catch(() => res.status(400).send("Bad request"));
 });
 
 router.get("/me", auth, async (req, res) => {
-  console.log(req.user._id)
   const user = await User.findOne({
     _id: req.user._id,
   });

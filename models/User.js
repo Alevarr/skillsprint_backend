@@ -10,7 +10,6 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   role: {
     type: String,
@@ -23,7 +22,8 @@ const userSchema = mongoose.Schema({
   balance: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
+    min: 0
   }
 });
 
@@ -44,5 +44,6 @@ const validateUser = (user) => {
   return schema.validate(user);
 };
 
+exports.userSchema = userSchema;
 exports.User = User;
 exports.validate = validateUser;
