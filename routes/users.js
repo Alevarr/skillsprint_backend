@@ -8,6 +8,7 @@ const auth = require("../middleware/auth");
 router.use(express.json());
 
 router.post("/", async (req, res) => {
+  req.body = req.body.params;
   const { error: validationError } = validate(req.body);
   if (validationError)
     return res
@@ -18,7 +19,7 @@ router.post("/", async (req, res) => {
     email: req.body.email,
   });
 
-  if (user) res.status(400).send("User with such email already exists");
+  if (user) return res.status(400).send("User with such email already exists");
 
   let salt = await bcrypt.genSalt(10);
   let password = await bcrypt.hash(req.body.password, salt);
@@ -33,13 +34,14 @@ router.post("/", async (req, res) => {
     .save()
     .then((result) =>
       res
-        .header("x-auth-token", result.generateAuthToken())
-        .send(_.pick(result, ["name", "email", "role", "balance"]))
+        .send({"x-auth-token": result.generateAuthToken()})
     )
     .catch(() => res.status(400).send("Bad request"));
 });
 
 router.get("/me", auth, async (req, res) => {
+  req.body = req.body.params;
+
   const user = await User.findOne({
     _id: req.user._id,
   });

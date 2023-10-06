@@ -6,6 +6,7 @@ const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const casesRouter = require("./routes/cases");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 if (!config.get("jwtPrivateKey")) {
   console.log("FATAL ERROR: JwtPrivateKey is not defined");
@@ -16,6 +17,8 @@ mongoose
   .connect("mongodb://127.0.0.1/skillsprint")
   .then(() => console.log("DB connection succesful..."))
   .catch((e) => console.log("DB connection failed..." + e.message));
+
+  app.use(cors());
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
